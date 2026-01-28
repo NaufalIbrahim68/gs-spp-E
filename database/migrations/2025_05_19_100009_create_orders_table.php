@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('orders', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('invoice')->unique();
+            $table->string('customer_id');
+            $table->string('customer_name');
+            $table->string('customer_phone');
+            $table->string('customer_address');
+            $table->unsignedInteger('district_id');
+            $table->integer('subtotal');
+            $table->char('status', 1)->default(0)->comment('0:new, 1:confirm, 2:proccess, 3:shipping, 4:done');
+            $table->string("tracking_number")->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('orders');
+    }
+};
