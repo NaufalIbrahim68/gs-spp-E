@@ -128,7 +128,7 @@ class TransactionController extends Controller
     {
         $req->validate([
             'customer_name' => 'required|string|max:100',
-            'customer_phone' => 'required|exists:customers,phone_number',
+            'customer_phone' => 'required|string|max:15',
             'email' => 'required|email',
             'customer_address' => 'required|string',
             'province_id' => 'required|exists:provinces,id',
@@ -191,14 +191,19 @@ class TransactionController extends Controller
 
     public function checkoutFinish($invoice)
     {
-        if (Order::where('invoice', $invoice)->exists()) {
-            $order = Order::with(['orderDetail.product'])
-                ->where('invoice', $invoice)
-                ->first();
+        $order = Order::with(['orderDetail.product'])
+            ->where('invoice', $invoice)
+            ->first();
+
+        if ($order) {
+            // IDOR Protection: Ensure only the owner can see the success page
+            if (auth()->check() && $order->customer_id !== auth()->user()->customer->id) {
+                return redirect()->route('front.index')->with('error', 'Anda tidak memiliki akses ke halaman ini.');
+            }
 
             return view('front.checkout_finish', compact('order'));
         }
 
-        return back();
+        return redirect()->route('front.index')->with('error', 'Invoice tidak ditemukan.');
     }
 }

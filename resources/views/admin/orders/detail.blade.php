@@ -41,7 +41,10 @@
 
             <div class="card-tools float-right">
               @if ($order->status == 1 && $order->payment->status == 0)
-              <a href="{{ url('admin/orders/accept_payment', $order->id)}}" class="btn btn-sm btn-primary">Terima Pesanan</a>
+              <form action="{{ route('admin.orders.accept_payment', $order->id) }}" method="post" style="display:inline;">
+                @csrf
+                <button type="submit" class="btn btn-sm btn-primary">Terima Pesanan</button>
+              </form>
               @endif
             </div>
 

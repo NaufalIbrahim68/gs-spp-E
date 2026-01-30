@@ -27,7 +27,7 @@ Route::middleware(['auth', 'checkRole:customer'])
         Route::get('/', [TransactionController::class, 'listCart'])->name('cart_list');
         Route::post('/', [TransactionController::class, 'addToCart'])->name('cart');
         Route::put('/', [TransactionController::class, 'updateCart'])->name('update_cart');
-        Route::delete('/', [TransactionController::class, 'deleteCart'])->name('delete_cart');
+        Route::delete('/{id}', [TransactionController::class, 'deleteCart'])->name('delete_cart');
     });
 
 Route::middleware(['auth', 'checkRole:customer'])
@@ -63,7 +63,7 @@ Route::middleware(['auth', 'checkRole:admin'])
             Route::get('/', [OrderController::class, 'index'])->name('orders.index');
             Route::post('/', [OrderController::class, 'shippingOrder'])->name('orders.tracking_number');
             Route::get('/{invoice}', [OrderController::class, 'detail'])->name('orders.detail');
-            Route::get('/accept_payment/{id}', [OrderController::class, 'acceptPayment']);
+            Route::post('/accept_payment/{id}', [OrderController::class, 'acceptPayment'])->name('orders.accept_payment');
             Route::delete('/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');
             Route::get('/return/{invoice}', [OrderController::class, 'return'])->name('orders.return');
             Route::get('/print/{invoice}', [OrderController::class, 'print'])->name('orders.print');

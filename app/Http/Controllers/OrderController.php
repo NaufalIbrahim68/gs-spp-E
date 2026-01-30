@@ -14,9 +14,19 @@ class OrderController extends Controller
     public function detailOrder($invoice)
     {
         if (Order::where('invoice', $invoice)->exists()) {
-            $order = Order::with(['district.city.province', 'orderDetail', 'orderDetail.product', 'payment'])->where('invoice', $invoice)->first();
+            $order = Order::with(['district.city.province', 'orderDetail', 'orderDetail.product', 'payment'])
+                ->where('invoice', $invoice)
+                ->first();
+
+            // IDOR Protection: Check if the order belongs to the authenticated user's customer record
+            if ($order->customer_id !== auth()->user()->customer->id) {
+                return redirect()->route('customer.dashboard')->with('error', 'Anda tidak memiliki akses ke pesanan ini.');
+            }
+
             return view('customer.detail', compact('order'));
         }
+
+        return redirect()->route('customer.dashboard')->with('error', 'Pesanan tidak ditemukan.');
     }
 
     public function payment()
@@ -63,7 +73,7 @@ class OrderController extends Controller
                     'order_id'      => $order->id,
                     'name'          => $req->name,
                     'transfer_to'   => $req->transfer_to,
-                    'transfer_date' => Carbon::parse($req->tranfer_date)->format('Y-m-d'),
+                    'transfer_date' => Carbon::parse($req->transfer_date)->format('Y-m-d'),
                     'amount'        => $req->amount,
                     'proof'         => $filename,
                     'status'        => false,
