@@ -15,6 +15,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [FrontController::class, 'index'])->name('front.index');
 
+// Generic dashboard route - redirects based on user role
+Route::middleware('auth')->get('/dashboard', function () {
+    if (auth()->user()->role === 'admin') {
+        return redirect()->route('admin.dashboard.index');
+    }
+    return redirect()->route('customer.dashboard');
+})->name('dashboard');
+
 Route::get('/produk', [FrontController::class, 'product'])->name('front.product');
 Route::get('category/{slug}', [FrontController::class, 'categoryProduct']);
 Route::get('produk/{slug}', [FrontController::class, 'show']);

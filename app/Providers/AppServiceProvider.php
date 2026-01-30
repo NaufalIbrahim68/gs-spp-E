@@ -19,6 +19,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Share pending orders count with all admin views for sidebar badge
+        view()->composer('layouts.admin.side', function ($view) {
+            $view->with('pendingOrders', \App\Models\Order::where('status', 1)->count());
+        });
     }
 }

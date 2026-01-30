@@ -1,71 +1,83 @@
- <aside class="main-sidebar sidebar-dark-primary elevation-4">
+ <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);">
 
-    <a href="{{ route('admin.dashboard.index') }}" class="brand-link text-center">
-      <span class="brand-text font-weight-light "><h4>Admin</h4></span>
+    <!-- Brand Logo -->
+    <a href="{{ route('admin.dashboard.index') }}" class="brand-link text-center" style="background: rgba(255, 255, 255, 0.05); border-bottom: 2px solid #ffc107;">
+      <i class="fas fa-crown" style="color: #ffc107; font-size: 24px;"></i>
+      <span class="brand-text font-weight-bold" style="color: #fff; font-size: 20px; margin-left: 8px;">GS-SPP Admin</span>
     </a>
 
-
     <div class="sidebar">
+      <!-- User Panel -->
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <div class="image">
+          <div class="rounded-circle bg-gradient-warning d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+            <i class="fas fa-user-shield text-white"></i>
+          </div>
+        </div>
+        <div class="info">
+          <a href="#" class="d-block text-white font-weight-bold">{{ auth()->user()->name }}</a>
+          <small class="text-warning"><i class="fas fa-circle" style="font-size: 8px;"></i> Online</small>
+        </div>
+      </div>
 
-      <nav class="mt-3">
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
           <li class="nav-item">
-            <a href="{{ route('admin.dashboard.index') }}" class="nav-link {{Request::path()==='admin/dashboard'?'active':''}} ">
-              <i class="far fa-circle nav-icon"></i>
-              <p>
-                Dashboard
-              </p>
+            <a href="{{ route('admin.dashboard.index') }}" class="nav-link {{Request::path()==='admin/dashboard'?'active':''}}">
+              <i class="nav-icon fas fa-tachometer-alt text-info"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+
+          <li class="nav-header" style="color: rgba(255,255,255,0.5); font-weight: 600; margin-top: 10px;">MASTER DATA</li>
+
+          <li class="nav-item">
+            <a href="{{ route('admin.category.index') }}" class="nav-link {{Request::path()==='admin/category'?'active':''}}">
+              <i class="nav-icon fas fa-tags text-primary"></i>
+              <p>Kategori</p>
             </a>
           </li>
 
           <li class="nav-item">
-            <a href="{{ route('admin.category.index') }}" class="nav-link {{Request::path()==='admin/category'?'active':''}} ">
-              <i class="fas fa-archive  nav-icon"></i>
-              <p>
-                Kategori
-              </p>
+            <a href="{{ route('admin.product.index') }}" class="nav-link {{Request::path()==='admin/product'?'active':''}}">
+              <i class="nav-icon fas fa-box text-warning"></i>
+              <p>Produk</p>
             </a>
           </li>
 
-          <li class="nav-item">
-            <a href="{{ route('admin.product.index') }}" class="nav-link {{Request::path()==='admin/product'?'active':''}} ">
-              <i class="fas fa-clock  nav-icon "></i>
-              <p>
-                Produk
-              </p>
-            </a>
-          </li>
+          <li class="nav-header" style="color: rgba(255,255,255,0.5); font-weight: 600; margin-top: 10px;">TRANSAKSI</li>
 
           <li class="nav-item">
-            <a href="{{route('admin.orders.index')}}" class="nav-link {{Request::path()==='admin/orders'?'active':''}} ">
-              <i class="fas fa-box  nav-icon "></i>
+            <a href="{{route('admin.orders.index')}}" class="nav-link {{Request::path()==='admin/orders'?'active':''}}">
+              <i class="nav-icon fas fa-shopping-cart text-success"></i>
               <p>
                 Pesanan
+                @if($pendingOrders ?? 0 > 0)
+                <span class="badge badge-danger right">{{ $pendingOrders }}</span>
+                @endif
               </p>
             </a>
           </li>
+
+          <li class="nav-header" style="color: rgba(255,255,255,0.5); font-weight: 600; margin-top: 10px;">MANAJEMEN USER</li>
 
           <li class="nav-item">
-            <a href="{{route('admin.customers.index')}}" class="nav-link {{Request::path()==='admin/customers'?'active':''}} ">
-              <i class="fas fa-users  nav-icon "></i>
-              <p>
-                Pelanggan
-              </p>
+            <a href="{{route('admin.customers.index')}}" class="nav-link {{Request::path()==='admin/customers'?'active':''}}">
+              <i class="nav-icon fas fa-users text-info"></i>
+              <p>Pelanggan</p>
             </a>
           </li>
 
-           <li class="nav-item">
-            <a href="{{route('admin.report.index')}}" class="nav-link {{Request::path()==='admin/laporan'?'active':''}} ">
-              <i class="fas fa-download  nav-icon "></i>
-              <p>
-                Laporan
-              </p>
+          <li class="nav-header" style="color: rgba(255,255,255,0.5); font-weight: 600; margin-top: 10px;">LAPORAN</li>
+
+          <li class="nav-item">
+            <a href="{{route('admin.report.index')}}" class="nav-link {{Request::path()==='admin/laporan'?'active':''}}">
+              <i class="nav-icon fas fa-chart-bar text-danger"></i>
+              <p>Laporan</p>
             </a>
           </li>
-
-
-
 
         </ul>
       </nav>

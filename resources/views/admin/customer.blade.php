@@ -46,7 +46,6 @@
                       <th>No Telpn</th>
                       <th>Jumlah Order</th>
                       <th>Email</th>
-                      <th>Verifikasi</th>
                       <th>Aksi</th>
                     </tr>
                   </thead>
@@ -58,7 +57,6 @@
                       <td>{{ $item->phone_number }}</td>
                       <td>{{ $item->orders_count }}</td>
                       <td>{{ $item->user->email??'-' }}</td>
-                      <td>{!! $item->user->verify_label !!}</td>
                       <td>
                         <form action="{{ route("admin.customers.destroy", $item->id) }}" method="post">
                           @csrf
@@ -69,7 +67,7 @@
                     </tr>
                     @empty
                     <tr>
-                      <td colspan="7" class="text-center">Tidak ada data</td>
+                      <td colspan="6" class="text-center">Tidak ada data</td>
                     </tr>
                     @endforelse
                   </tbody>

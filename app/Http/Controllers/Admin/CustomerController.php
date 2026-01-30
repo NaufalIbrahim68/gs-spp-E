@@ -10,7 +10,12 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $customers = Customer::with('user')->withCount('orders')->paginate(10);
+        $customers = Customer::with('user')
+            ->whereHas('user', function($query) {
+                $query->where('role', 'customer');
+            })
+            ->withCount('orders')
+            ->paginate(10);
 
         return view('admin.customer', compact('customers'));
     }

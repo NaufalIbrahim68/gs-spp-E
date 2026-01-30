@@ -17,8 +17,46 @@ class DashboardController extends Controller{
         $income = Order::where('status', 4)->sum('subtotal');
         $date = Carbon::now()->subDays(7);
         $customer = User::where('created_at', '>=', $date)->count();
+        
+        // Additional statistics
+        $totalCustomers = User::where('role', 'customer')->count();
+        $pendingPayments = Order::where('status', 1)->count();
+        $totalOrders = Order::count();
+        $completedOrders = Order::where('status', 4)->count();
+        
+        // Recent orders
+        $recentOrders = Order::with(['customer'])
+            ->orderBy('created_at', 'DESC')
+            ->limit(5)
+            ->get();
+        
+        // Monthly revenue for chart (last 6 months)
+        $monthlyRevenue = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $month = Carbon::now()->subMonths($i);
+            $revenue = Order::where('status', 4)
+                ->whereYear('created_at', $month->year)
+                ->whereMonth('created_at', $month->month)
+                ->sum('subtotal');
+            $monthlyRevenue[] = [
+                'month' => $month->format('M'),
+                'revenue' => $revenue
+            ];
+        }
 
-        return view('admin.dashboard', compact('product', 'order', 'income', 'date', 'customer'));
+        return view('admin.dashboard', compact(
+            'product', 
+            'order', 
+            'income', 
+            'date', 
+            'customer',
+            'totalCustomers',
+            'pendingPayments',
+            'totalOrders',
+            'completedOrders',
+            'recentOrders',
+            'monthlyRevenue'
+        ));
     }
 
     public function orderReport(){
