@@ -2,10 +2,10 @@
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button">
-          <i class="fas fa-bars"></i>
+        <a href="{{ route('admin.dashboard.index') }}" class="nav-link p-0">
+          <img src="{{asset('front/img/logo_r.png')}}" alt="GS-SPP Logo" style="max-height: 55px; width: auto; margin-top: -5px;">
         </a>
-     
+      </li>
     </ul>
 
     <!-- Right navbar links -->

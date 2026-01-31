@@ -1,11 +1,5 @@
  <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);">
 
-    <!-- Brand Logo -->
-    <a href="{{ route('admin.dashboard.index') }}" class="brand-link text-center" style="background: rgba(255, 255, 255, 0.05); border-bottom: 2px solid #ffc107;">
-      <i class="fas fa-crown" style="color: #ffc107; font-size: 24px;"></i>
-      <span class="brand-text font-weight-bold" style="color: #fff; font-size: 20px; margin-left: 8px;">GS-SPP Admin</span>
-    </a>
-
     <div class="sidebar">
       <!-- User Panel -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
