@@ -78,9 +78,9 @@
                                         <label class="text-small text-uppercase" for="province_id">Provinsi</label>
                                         <select name="province_id" id="province_id"
                                             class="form-control @error('province_id') is-invalid @enderror">
-                                            <option disabled selected>Pilih Provinsi</option>
+                                            <option disabled {{ $provinces->count() > 1 ? 'selected' : '' }}>Pilih Provinsi</option>
                                             @foreach ($provinces as $province)
-                                                <option value="{{ $province->id }}">{{ $province->name }}</option>
+                                                <option value="{{ $province->id }}" {{ $provinces->count() == 1 ? 'selected' : '' }}>{{ $province->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -103,6 +103,32 @@
                                         </div>
                                     </div>
 
+                                </div>
+                            </div>
+
+                            <div class="checkout-section" id="shipping-method">
+                                <div class="section-header">
+                                    <div class="section-number">3</div>
+                                    <h3>Metode Pengiriman</h3>
+                                </div>
+                                <div class="section-content">
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="radio" name="shipping_method" id="shipping_regular" value="regular" required checked>
+                                        <label class="form-check-label" for="shipping_regular">
+                                            <strong>Regular</strong> <br>
+                                            <span class="text-muted text-small">Estimasi 2-3 Hari</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="shipping_method" id="shipping_express" value="express">
+                                        <label class="form-check-label" for="shipping_express">
+                                            <strong>Express</strong> <br>
+                                            <span class="text-muted text-small">Estimasi 1 Hari (Next Day)</span>
+                                        </label>
+                                    </div>
+                                    <div class="mt-3">
+                                        <small class="text-info"><i class="bi bi-info-circle"></i> Biaya ongkir akan dihitung otomatis berdasarkan Kota Tujuan & Layanan.</small>
+                                    </div>
                                 </div>
                             </div>
 
@@ -159,8 +185,17 @@
 
                             <div class="order-totals">
                                 <div class="order-subtotal d-flex justify-content-between">
-                                    <span>Total</span>
+                                    <span>Total Subtotal</span>
                                     <span>Rp{{ number_format($subtotal) }}</span>
+                                </div>
+                                <div class="order-subtotal d-flex justify-content-between mt-2">
+                                    <span>Biaya Pengiriman</span>
+                                    <span id="shipping-cost-display">Rp0</span>
+                                </div>
+                                <hr>
+                                <div class="order-subtotal d-flex justify-content-between">
+                                    <strong class="text-uppercase">Total Bayar</strong>
+                                    <strong id="grand-total-display" class="text-primary">Rp{{ number_format($subtotal) }}</strong>
                                 </div>
                             </div>
 
@@ -183,7 +218,7 @@
 @section('js')
 
     <script>
-        $('#province_id').on('click', function() {
+        $('#province_id').on('change', function() { // Changed from click to change
 
             $.ajax({
                 url: "{{ url('api/city') }}",
@@ -203,8 +238,9 @@
 
         });
 
-        $('#city_id').on('click', function() {
+        $('#city_id').on('change', function() {
 
+            // Load Districts
             $.ajax({
                 url: "{{ url('api/district') }}",
                 type: "GET",
@@ -220,7 +256,60 @@
                     });
                 }
             });
+            
+            // Calculate Shipping
+            calculateShipping();
+        });
 
+        // Shipping Calculation Logic (Simulation)
+        function calculateShipping() {
+            let cityText = $('#city_id option:selected').text().toLowerCase();
+            let method = $('input[name="shipping_method"]:checked').val();
+            let cost = 0;
+            let subtotal = {{ $subtotal }};
+
+            // Needs to check if city is selected (not the placeholder)
+            if (cityText.includes('pilih')) {
+                $('#shipping-cost-display').text('Pilih Kota');
+                // Reset to subtotal
+                $('#grand-total-display').text('Rp' + new Intl.NumberFormat('id-ID').format(subtotal));
+                $('.btn-price').text('Rp' + new Intl.NumberFormat('id-ID').format(subtotal));
+                return;
+            }
+
+            if (cityText.includes('cilacap')) {
+                cost = (method === 'express') ? 20000 : 10000;
+            } else if (cityText.includes('purwokerto') || cityText.includes('banyumas')) {
+                cost = (method === 'express') ? 30000 : 20000;
+            } else if (cityText.includes('purbalingga')) {
+                cost = (method === 'express') ? 40000 : 30000;
+            } else {
+                 // Default fallback
+                 cost = (method === 'express') ? 50000 : 25000;
+            }
+            
+            // Format Currency
+            const formatter = new Intl.NumberFormat('id-ID');
+            
+            // Update UI
+            $('#shipping-cost-display').text('Rp' + formatter.format(cost));
+            
+            let total = subtotal + cost;
+            $('#grand-total-display').text('Rp' + formatter.format(total));
+             
+            // Update button text
+             $('.btn-price').text('Rp' + formatter.format(total));
+        }
+
+        // Listeners
+        $('#city_id').on('change', calculateShipping);
+        $('input[name="shipping_method"]').on('change', calculateShipping);
+
+        // Auto-load cities if province is pre-selected
+        $(document).ready(function() {
+            if ($('#province_id').val()) {
+                $('#province_id').trigger('change');
+            }
         });
     </script>
 

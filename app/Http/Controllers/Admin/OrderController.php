@@ -59,9 +59,25 @@ class OrderController extends Controller
         $order->update([
             'tracking_number' => $req->tracking_number,
             'status' => 3,
+            'shipping_status' => 'shipped' // Auto set to shipped when tracking number added
         ]);
 
         return back()->with('success', 'Berhasil mengirim resi');
+    }
+
+    public function updateShippingStatus(Request $req)
+    {
+        $req->validate([
+            'order_id' => 'required|exists:orders,id',
+            'shipping_status' => 'required',
+        ]);
+
+        $order = Order::find($req->order_id);
+        $order->update([
+            'shipping_status' => $req->shipping_status,
+        ]);
+
+        return back()->with('success', 'Status pengiriman diperbarui');
     }
 
     public function destroy($id)

@@ -76,6 +76,7 @@ Route::middleware(['auth', 'checkRole:admin'])
             Route::get('/return/{invoice}', [OrderController::class, 'return'])->name('orders.return');
             Route::get('/print/{invoice}', [OrderController::class, 'print'])->name('orders.print');
             Route::post('/return', [OrderController::class, 'approveReturn'])->name('orders.approve_return');
+            Route::post('/shipping-status', [OrderController::class, 'updateShippingStatus'])->name('orders.update_shipping_status');
         });
 
         Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');

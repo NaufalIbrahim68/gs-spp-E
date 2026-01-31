@@ -19,7 +19,7 @@ class OrderController extends Controller
                 ->first();
 
             // IDOR Protection: Check if the order belongs to the authenticated user's customer record
-            if ($order->customer_id !== auth()->user()->customer->id) {
+            if ($order->customer_id != auth()->user()->customer->id) {
                 return redirect()->route('customer.dashboard')->with('error', 'Anda tidak memiliki akses ke pesanan ini.');
             }
 
@@ -37,7 +37,8 @@ class OrderController extends Controller
             ->count();
 
         if ($cekInvoice != 0 && $cekUser != 0) {
-            return view("customer.payment");
+            $order = Order::where('invoice', request()->invoice)->first();
+            return view("customer.payment", compact('order'));
         }
 
         return back();
@@ -59,8 +60,10 @@ class OrderController extends Controller
 
             $order = Order::where('invoice', $req->invoice)->first();
 
-            if ($req->amount != $order->subtotal) {
-                return back()->with('error', 'Jumlah Transfer Kurang Dari Tagihan Pemesanan');
+            $totalAmount = $order->subtotal + $order->shipping_cost;
+
+            if ($req->amount != $totalAmount) {
+                return back()->with('error', 'Jumlah Transfer Kurang Dari Tagihan Pemesanan (Total: ' . number_format($totalAmount) . ')');
             }
 
             if ($order->status == 0 && $req->hasFile('proof')) {

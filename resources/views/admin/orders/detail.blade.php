@@ -99,6 +99,29 @@
                     </td>
                   </tr>
                   @endif
+                  @if ($order->status >= 3)
+                  <tr>
+                    <td>Status Pengiriman</td>
+                    <td>
+                      <form action="{{ route('admin.orders.update_shipping_status') }}" method="post">
+                        @csrf
+                        <input type="hidden" name="order_id" value="{{ $order->id }}">
+                        <div class="input-group">
+                          <select name="shipping_status" class="form-control">
+                              <option value="pending" {{ $order->shipping_status == 'pending' ? 'selected' : '' }}>Pending</option>
+                              <option value="packed" {{ $order->shipping_status == 'packed' ? 'selected' : '' }}>Packed</option>
+                              <option value="shipped" {{ $order->shipping_status == 'shipped' ? 'selected' : '' }}>Shipped</option>
+                              <option value="in_transit" {{ $order->shipping_status == 'in_transit' ? 'selected' : '' }}>In Transit</option>
+                              <option value="delivered" {{ $order->shipping_status == 'delivered' ? 'selected' : '' }}>Delivered</option>
+                          </select>
+                          <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                          </div>
+                        </div>
+                      </form>
+                    </td>
+                  </tr>
+                  @endif
                 </table>
               </div>
 
@@ -167,8 +190,16 @@
                         </tbody>
                         <tfoot>
                           <tr>
-                            <td colspan="4" class="bg-light text-center">Total</td>
+                            <td colspan="4" class="text-right">Subtotal</td>
                             <th>Rp {{ number_format($order->subtotal) }}</th>
+                          </tr>
+                          <tr>
+                            <td colspan="4" class="text-right">Biaya Pengiriman ({{ $order->shipping_method ?? '-' }})</td>
+                            <th>Rp {{ number_format($order->shipping_cost) }}</th>
+                          </tr>
+                          <tr>
+                            <td colspan="4" class="text-right"><strong>Total</strong></td>
+                            <th>Rp {{ number_format($order->subtotal + $order->shipping_cost) }}</th>
                           </tr>
                         </tfoot>
                       </table>

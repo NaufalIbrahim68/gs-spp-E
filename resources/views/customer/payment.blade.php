@@ -56,8 +56,12 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="">Jumlah Transfer</label>
+                                        <div class="alert alert-info">
+                                            <strong>Total Tagihan: Rp{{ number_format($order->subtotal + $order->shipping_cost) }}</strong>
+                                        </div>
                                         <input type="number" name="amount" class="form-control"
-                                            placeholder="Masukan jumlah transfer" value="{{ old('amount') }}">
+                                            placeholder="Masukan jumlah transfer" value="{{ old('amount') ?? ($order->subtotal + $order->shipping_cost) }}" readonly>
+                                        <small class="text-muted">Nominal transfer harus sesuai dengan total tagihan.</small>
                                         <p class="text-danger">{{ $errors->first('amount') }}</p>
                                     </div>
                                     <div class="form-group">

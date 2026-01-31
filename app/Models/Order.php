@@ -43,7 +43,8 @@ class Order extends Model
         } elseif ($this->status == 2) {
             return '<span class="badge badge-info">Proses</span>';
         } elseif ($this->status == 3) {
-            return '<span class="badge badge-warning">Dikirim</span>';
+            $shippingLabel = ucfirst(str_replace('_', ' ', $this->shipping_status));
+            return '<span class="badge badge-warning">Dikirim: ' . $shippingLabel . '</span>';
         }
         return '<span class="badge badge-success">Selesai</span>';
     }

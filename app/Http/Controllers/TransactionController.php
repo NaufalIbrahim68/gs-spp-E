@@ -99,12 +99,14 @@ class TransactionController extends Controller
         return back();
     }
 
+
     public function checkout()
     {
         $carts = $this->getCarts();
 
         if (auth()->check() && $carts != null) {
-            $provinces = Province::orderBy('created_at', 'DESC')->get();
+            // SIMULATION: Restrict to Jawa Tengah
+            $provinces = Province::where('name', 'LIKE', '%Jawa Tengah%')->get();
             $carts = $this->getCarts();
             $subtotal = $this->getSubtotal();
 
@@ -115,7 +117,15 @@ class TransactionController extends Controller
     }
     public function getCity()
     {
-        $city = City::where('province_id', request()->province_id)->orderBy('type', 'ASC')->get();
+        // SIMULATION: Restrict to specific cities in Jawa Tengah
+        $city = City::where('province_id', request()->province_id)
+            ->where(function ($q) {
+                $q->where('name', 'LIKE', '%Cilacap%')
+                  ->orWhere('name', 'LIKE', '%Banyumas%') // Purwokerto usually under Banyumas
+                  ->orWhere('name', 'LIKE', '%Purbalingga%');
+            })
+            ->orderBy('type', 'ASC')
+            ->get();
         return response()->json(['status' => 'success', 'data' => $city]);
     }
     public function getDistrict()
@@ -134,6 +144,7 @@ class TransactionController extends Controller
             'province_id' => 'required|exists:provinces,id',
             'city_id' => 'required|exists:cities,id',
             'district_id' => 'required|exists:districts,id',
+            'shipping_method' => 'required|in:regular,express',
         ]);
 
 
@@ -145,6 +156,23 @@ class TransactionController extends Controller
 
             $carts = $this->getCarts();
             $subtotal = $this->getSubtotal();
+
+            // Calculate Shipping Cost
+            $city = City::find($req->city_id);
+            $cityName = strtolower($city->name);
+            $shippingCost = 0;
+
+            if (str_contains($cityName, 'cilacap')) {
+                $shippingCost = $req->shipping_method == 'express' ? 20000 : 10000;
+            } elseif (str_contains($cityName, 'purwokerto') || str_contains($cityName, 'banyumas')) {
+                 // Purwokerto is often under Banyumas, enabling both just in case
+                $shippingCost = $req->shipping_method == 'express' ? 30000 : 20000;
+            } elseif (str_contains($cityName, 'purbalingga')) {
+                $shippingCost = $req->shipping_method == 'express' ? 40000 : 30000;
+            } else {
+                // Default fallback if simulation city not matched (optional)
+                $shippingCost = $req->shipping_method == 'express' ? 50000 : 25000;
+            }
 
             $customer = Customer::find(auth()->user()->customer->id);
 
@@ -164,6 +192,9 @@ class TransactionController extends Controller
                 'customer_address' => $req->customer_address,
                 'district_id' => $req->district_id,
                 'subtotal' => $subtotal,
+                'shipping_cost' => $shippingCost,
+                'shipping_method' => $req->shipping_method,
+                'shipping_status' => 'pending',
             ]);
 
             foreach ($carts as $item) {

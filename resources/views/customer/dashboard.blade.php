@@ -24,6 +24,13 @@
                 </button>
             </div>
 
+            @if (session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+            @if (session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
+
             <div class="row g-4">
                 <!-- Profile Menu -->
                 <div class="col-lg-3">
@@ -80,7 +87,7 @@
                                                     <span class="label">Order ID:</span>
                                                     <span class="value">#{{ $item->invoice }}</span>
                                                 </div>
-                                                <div class="order-date"> <a href="#" class="detail" data-id="{{ $item->invoice }}">Detail</a></div>
+                                                <div class="order-date"> <a href="{{ route('customer.detailOrder', $item->invoice) }}">Detail</a></div>
                                             </div>
                                             <div class="order-content">
                                                 <div class="order-info">
@@ -108,10 +115,8 @@
 
                                                 </form>
                                                 @if ($item->status == 0)
-                                                    <button class="btn-details">
-                                                        <a href="{{ url('/customer/payment?invoice=' . $item->invoice) }}"
-                                                            class="">Konfirmasi</a>
-                                                    </button>
+                                                    <a href="{{ url('/customer/payment?invoice=' . $item->invoice) }}"
+                                                       class="btn-details">Konfirmasi</a>
                                                 @endif
 
 
@@ -136,40 +141,8 @@
 
     </section>
 
-    <div class="modal fade" id="modal-detail" tabindex="-1" aria-labelledby="modalDetailLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalDetailLabel">Detail Pesanan</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 @endsection
 
 @section('js')
-<script>
-    $(".detail").on('click', function() {
-        const id = $(this).data('id');
-        let url = "{{ url('customer/pesanan/') }}/" + id;
 
-        $.ajax({
-            url: url,
-            method: "GET",
-            success: function(data) {
-
-                $("#modal-detail").find(".modal-body").html(data)
-                $("#modal-detail").modal('show')
-            }
-        });
-
-    });
-</script>
 @endsection

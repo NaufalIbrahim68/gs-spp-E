@@ -56,9 +56,17 @@
                     </div>
 
                     <div class="order-totals mt-4">
-                        <div class="d-flex justify-content-between py-2 total-row">
+                        <div class="d-flex justify-content-between py-2">
+                            <span>Subtotal</span>
+                            <span>Rp{{ number_format($order->subtotal) }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between py-2">
+                            <span>Biaya Pengiriman ({{ $order->shipping_method ?? '-' }})</span>
+                            <span>Rp{{ number_format($order->shipping_cost) }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between py-2 total-row border-top pt-2">
                             <strong>Total</strong>
-                            <strong>Rp{{ number_format($order->subtotal) }}</strong>
+                            <strong>Rp{{ number_format($order->subtotal + $order->shipping_cost) }}</strong>
                         </div>
                     </div>
                 </div>
