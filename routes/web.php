@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\CustomerProfileController;
 use App\Http\Controllers\DashboardController as ControllersDashboardController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\OrderController as ControllersOrderController;
@@ -52,6 +53,10 @@ Route::middleware(['auth', 'checkRole:customer'])
     ->name('customer.')
     ->group(function () {
         Route::get('/', [ControllersDashboardController::class, 'dashboard'])->name('dashboard');
+        Route::get('/profile', [CustomerProfileController::class, 'profile'])->name('profile');
+        Route::post('/profile', [CustomerProfileController::class, 'updateProfile'])->name('profile.update');
+        Route::get('/settings', [CustomerProfileController::class, 'settings'])->name('settings');
+        Route::post('/password', [CustomerProfileController::class, 'updatePassword'])->name('password.update');
         Route::post('/pesanan', [ControllersOrderController::class, 'acceptOrder'])->name('order_accept');
         Route::get('/pesanan/{invoice}', [ControllersOrderController::class, 'detailOrder'])->name('detailOrder');
         Route::get('/payment', [ControllersOrderController::class, 'payment'])->name('payment');

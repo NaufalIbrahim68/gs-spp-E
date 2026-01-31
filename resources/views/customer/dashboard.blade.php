@@ -44,10 +44,27 @@
                         <nav class="menu-nav">
                             <ul class="nav flex-column" role="tablist">
                                 <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('customer.dashboard') }}">
+                                        <i class="bi bi-speedometer2"></i>
+                                        <span>Dashboard</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link active" data-bs-toggle="tab" href="#orders">
                                         <i class="bi bi-box-seam"></i>
                                         <span>Order Saya</span>
-
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('customer.profile') }}">
+                                        <i class="bi bi-person"></i>
+                                        <span>Profile</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('customer.settings') }}">
+                                        <i class="bi bi-gear"></i>
+                                        <span>Settings</span>
                                     </a>
                                 </li>
                             </ul>
@@ -70,6 +87,43 @@
 
                 <!-- Content Area -->
                 <div class="col-lg-9">
+                    <!-- Statistics Cards -->
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="100">
+                            <div class="stats-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <div class="stats-icon">
+                                    <i class="bi bi-cart-check"></i>
+                                </div>
+                                <div class="stats-content">
+                                    <h3>{{ $totalOrders }}</h3>
+                                    <p>Total Orders</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="200">
+                            <div class="stats-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                <div class="stats-icon">
+                                    <i class="bi bi-wallet2"></i>
+                                </div>
+                                <div class="stats-content">
+                                    <h3>Rp {{ number_format($totalSpending) }}</h3>
+                                    <p>Total Belanja</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="300">
+                            <div class="stats-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                                <div class="stats-icon">
+                                    <i class="bi bi-check-circle"></i>
+                                </div>
+                                <div class="stats-content">
+                                    <h3>{{ $completedOrders }}</h3>
+                                    <p>Selesai</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="content-area">
                         <div class="tab-content">
                             <!-- Orders Tab -->
@@ -144,5 +198,42 @@
 @endsection
 
 @section('js')
-
+    <style>
+        .stats-card {
+            padding: 25px;
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .stats-card .stats-icon {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 50px;
+            opacity: 0.3;
+        }
+        
+        .stats-card .stats-content h3 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: white;
+        }
+        
+        .stats-card .stats-content p {
+            font-size: 14px;
+            margin: 0;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+    </style>
 @endsection

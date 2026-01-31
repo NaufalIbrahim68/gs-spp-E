@@ -33,7 +33,22 @@
                                         <i class="bi bi-bag-check me-2"></i>
                                         <span>Order</span>
                                     </a>
-
+                                    <a class="dropdown-item d-flex align-items-center" href="{{route("customer.profile")}}">
+                                        <i class="bi bi-person me-2"></i>
+                                        <span>Profile</span>
+                                    </a>
+                                    <a class="dropdown-item d-flex align-items-center" href="{{route("customer.settings")}}">
+                                        <i class="bi bi-gear me-2"></i>
+                                        <span>Settings</span>
+                                    </a>
+                                    <form id="logout-form-header" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                    <a class="dropdown-item d-flex align-items-center text-danger" href="{{ route('logout') }}"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form-header').submit();">
+                                        <i class="bi bi-box-arrow-right me-2"></i>
+                                        <span>Logout</span>
+                                    </a>
                                 </div>
                             @endif
                             @if (!auth()->check())
