@@ -30,21 +30,21 @@
                             <form action="{{ route('admin.category.store') }}" method="post">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="name">Kategori</label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                        value="{{ old('name') }}" required placeholder="Kategori" name="name">
-                                    <p class="text-danger">{{ $errors->first('name') }}</p>
-                                </div>
-                                <div class="form-group">
-                                    <label for="parent">Parent Kategori</label>
-                                    <select name="parent_id" id="parent"
-                                        class="form-control @error('parent_id') is-invalid @enderror">
+                                    <label for="category">Kategori</label>
+                                    <select name="category_id" id="category"
+                                        class="form-control @error('category_id') is-invalid @enderror">
                                         <option selected disabled>Pilih Kategori</option>
                                         @foreach ($parent as $item)
                                             <option value="{{ $item->id }}"> {{ $item->name }}</option>
                                         @endforeach
                                     </select>
-                                    <p class="text-danger">{{ $errors->first('parent_id') }}</p>
+                                    <p class="text-danger">{{ $errors->first('category_id') }}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Parent</label>
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                        value="{{ old('name') }}" placeholder="Parent" name="name">
+                                    <p class="text-danger">{{ $errors->first('name') }}</p>
 
                                 </div>
                                 <div class="form-group">
@@ -137,18 +137,18 @@
                         @csrf
                         @method('PUT')
                         <div class="form-group">
-                            <label for="name">Kategori</label>
-                            <input type="text" class="form-control @error('name') is-invalid @enderror" value=""
-                                required placeholder="Kategori" name="name" id="name">
-                            <p class="text-danger">{{ $errors->first('name') }}</p>
-                        </div>
-                        <div class="form-group">
-                            <label for="parent">Parent Kategori</label>
-                            <select name="parent_id" id="parent_id"
-                                class="form-control @error('parent_id') is-invalid @enderror">
+                            <label for="category">Kategori</label>
+                            <select name="category_id" id="category_id"
+                                class="form-control @error('category_id') is-invalid @enderror">
 
                             </select>
-                            <p class="text-danger">{{ $errors->first('parent_id') }}</p>
+                            <p class="text-danger">{{ $errors->first('category_id') }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Parent</label>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" value=""
+                                placeholder="Parent" name="name" id="name">
+                            <p class="text-danger">{{ $errors->first('name') }}</p>
                         </div>
 
                 </div>
@@ -178,14 +178,16 @@
                 },
                 success: function(data) {
                     let category = data.category;
-                    $('#name').val(category.name);
+                    // Set parent name to input field
+                    $('#name').val(category.parent ? category.parent.name : '');
 
-                    $('#parent_id').empty();
-                    $('#parent_id').append('<option value="" selected >Pilih Ketegori</option>')
+                    // Populate category dropdown
+                    $('#category_id').empty();
+                    $('#category_id').append('<option value="" disabled >Pilih Kategori</option>')
                     $.each(data.parent, function(key, item) {
-                        $('#parent_id').append(
-                            `<option value=" ` + item.id + ` " ` + (category.parent_id ==
-                                item.id ? `selected` : ``) + `> ` + item.name + `</option>`);
+                        $('#category_id').append(
+                            `<option value="` + item.id + `" ` + (category.id ==
+                                item.id ? `selected` : ``) + `>` + item.name + `</option>`);
                     })
 
                 }

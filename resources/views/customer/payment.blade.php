@@ -72,7 +72,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="">Bukti Transfer</label>
-                                        <input type="file" name="proof" class="form-control"
+                                        <input type="file" name="proof" class="form-control" accept="image/*"
                                             placeholder="Masukan jumlah transfer" value="{{ old('proof') }}">
                                         <p class="text-danger">{{ $errors->first('proof') }}</p>
                                     </div>

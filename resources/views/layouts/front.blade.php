@@ -46,7 +46,7 @@
               <a href="{{ route('front.index') }}" class="logo">
                 <span class="sitename">Toko Emas Gombong-Safary</span>
               </a>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in nibh vehicula, facilisis magna ut, consectetur lorem.</p>
+
               <div class="footer-contact mt-4">
                 <div class="contact-item">
                   <i class="bi bi-geo-alt"></i>

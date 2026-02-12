@@ -213,7 +213,7 @@ class TransactionController extends Controller
             $carts = [];
             $cookie = cookie('gold-carts', json_encode($carts), 2880);
 
-            return redirect(route('front.finish_checkout', $order->invoice))->cookie($cookie);
+            return redirect(route('customer.payment', ['invoice' =>$order->invoice]))->cookie($cookie);
         } catch (\Exception $th) {
             DB::rollback();
             return back()->with('error', $th->getMessage());

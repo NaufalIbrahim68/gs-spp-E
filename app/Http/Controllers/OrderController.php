@@ -52,7 +52,7 @@ class OrderController extends Controller
             'transfer_to'   => 'required|string',
             'transfer_date' => 'required',
             'amount'        => 'required|integer',
-            'proof'         => 'required|image|mimes:jpg,png,jpeg'
+            'proof'         => 'required|image|mimes:jpg,png,jpeg,webp,svg'
         ]);
 
         DB::beginTransaction();
@@ -85,7 +85,7 @@ class OrderController extends Controller
                 $order->update(['status' => 1]);
                 DB::commit();
 
-                return back()->with("success", "Pesanan Dikonfirmasi");
+                return redirect()->route('customer.dashboard')->with("success", "Pesanan Dikonfirmasi");
             }
         } catch (\Exception $th) {
             DB::rollback();

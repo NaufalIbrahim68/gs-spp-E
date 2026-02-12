@@ -73,7 +73,45 @@
                   </tr>
                   <tr>
                     <td>Order Status</td>
-                    <td>{!! $order->status_label !!}</td>
+                    <td>{!! $order->status_label !!}
+                        <button type="button" class="btn btn-sm btn-default ml-2" data-toggle="modal" data-target="#modalStatus">
+                           <i class="fa fa-edit"></i> Ubah
+                        </button>
+                        
+                        <!-- Modal -->
+                        <div class="modal fade" id="modalStatus" tabindex="-1" role="dialog" aria-labelledby="modalStatusLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="modalStatusLabel">Ubah Status Pesanan</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <form action="{{ route('admin.orders.update_status') }}" method="post">
+                                  @csrf
+                                  <input type="hidden" name="order_id" value="{{ $order->id }}">
+                                  <div class="modal-body">
+                                      <div class="form-group">
+                                          <label>Pilih Status</label>
+                                          <select name="status" class="form-control">
+                                              <option value="0" {{ $order->status == 0 ? 'selected' : '' }}>Baru (0)</option>
+                                              <option value="1" {{ $order->status == 1 ? 'selected' : '' }}>Dikonfirmasi (1)</option>
+                                              <option value="2" {{ $order->status == 2 ? 'selected' : '' }}>Proses (2)</option>
+                                              <option value="3" {{ $order->status == 3 ? 'selected' : '' }}>Dikirim (3)</option>
+                                              <option value="4" {{ $order->status == 4 ? 'selected' : '' }}>Selesai (4)</option>
+                                          </select>
+                                      </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                  </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                    </td>
                   </tr>
                   @if ($order->status > 1)
                   <tr>

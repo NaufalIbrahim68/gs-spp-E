@@ -36,16 +36,18 @@ class Order extends Model
 
     public function getStatusLabelAttribute()
     {
-        if ($this->status == 0) {
-            return '<span class="badge badge-secondary">Baru</span>';
-        } elseif ($this->status == 1) {
-            return '<span class="badge badge-primary">Dikonfirmasi</span>';
+        if ($this->status == 0 || $this->status == 1) {
+            return '<span class="badge badge-secondary">Pending</span>';
         } elseif ($this->status == 2) {
-            return '<span class="badge badge-info">Proses</span>';
+            return '<span class="badge badge-info">Packed</span>';
         } elseif ($this->status == 3) {
             $shippingLabel = ucfirst(str_replace('_', ' ', $this->shipping_status));
-            return '<span class="badge badge-warning">Dikirim: ' . $shippingLabel . '</span>';
+            $badgeClass = 'badge-warning';
+            if ($this->shipping_status == 'delivered') {
+                $badgeClass = 'badge-success';
+            }
+            return '<span class="badge ' . $badgeClass . '">' . $shippingLabel . '</span>';
         }
-        return '<span class="badge badge-success">Selesai</span>';
+        return '<span class="badge badge-success">Delivered</span>';
     }
 }

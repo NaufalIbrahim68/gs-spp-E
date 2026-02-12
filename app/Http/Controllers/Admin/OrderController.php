@@ -80,6 +80,16 @@ class OrderController extends Controller
         return back()->with('success', 'Status pengiriman diperbarui');
     }
 
+    public function updateStatus(Request $req)
+    {
+        $order = Order::find($req->order_id);
+        $order->update([
+            'status' => $req->status,
+        ]);
+
+        return back()->with('success', 'Status pesanan berhasil diperbarui');
+    }
+
     public function destroy($id)
     {
         $order = Order::find($id);

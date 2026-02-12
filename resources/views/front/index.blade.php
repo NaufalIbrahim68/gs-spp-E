@@ -9,11 +9,10 @@
                         <span class="promo-badge">New Collection 2025</span>
                         <h1>Kilau Emas, Kemewahan Abadi</h1>
                         <p> Temukan koleksi eksklusif gelang, anting, dan perhiasan emas yang memancarkan keanggunan di setiap momen.</p>
-                        <div class="hero-cta">
+                        <div class="hero-cta d-flex justify-content-center">
                             <a href="{{route('front.product')}}" class="btn btn-shop">Shop Now <i class="bi bi-arrow-right"></i></a>
-                            <a href="{{route('front.product')}}" class="btn btn-collection">View Collection</a>
                         </div>
-                        <div class="hero-features">
+                        <div class="hero-features d-flex justify-content-center">
                             <div class="feature-item">
                                 <i class="bi bi-truck"></i>
                                 <span>Free Shipping</span>
