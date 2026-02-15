@@ -108,7 +108,7 @@
 
 
                                                 <form action="{{ route('customer.order_accept') }}" method="POST"
-                                                    onsubmit="return confirm('Sudah yakin barang nya sesuai?')">
+                                                    class="form-terima-barang">
                                                     @csrf
 
                                                     <input type="hidden" name="order_id" value="{{ $item->id }}">
@@ -147,6 +147,27 @@
 @endsection
 
 @section('js')
+    <script>
+        document.querySelectorAll('.form-terima-barang').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Konfirmasi Terima Barang',
+                    text: "Apakah Anda yakin barang yang diterima sudah sesuai?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Sesuai!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.submit();
+                    }
+                });
+            });
+        });
+    </script>
     <style>
         .stats-card {
             padding: 25px;

@@ -35,7 +35,9 @@ class FrontController extends Controller
 
 
 
-        return view('front.product', compact('products'));
+        $categories = Category::all();
+
+        return view('front.product', compact('products', 'categories'));
     }
 
     public function CategoryProduct($slug)

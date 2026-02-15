@@ -14,6 +14,12 @@ use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 
+
+
+
+
+
+
 Route::get('/', [FrontController::class, 'index'])->name('front.index');
 
 // Generic dashboard route - redirects based on user role
